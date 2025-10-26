@@ -64,6 +64,7 @@ trap 'rm -f "$err"' EXIT
 	# with empty string instead of just indexing like it should
 	test $# -eq 0 -a -n "$GIT_DIR" &&
 		set -- "$GIT_DIR"
+	unset GIT_DIR
 	for d in "$@"
 	do
 		repo "$d" || {
