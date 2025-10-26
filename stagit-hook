@@ -19,9 +19,11 @@ hooked() (
 	) done | sort -rn | cut -f2-
 )
 
-index() {
-	hooked | xargs stagit-index > "$basedir"/index.html
-}
+index() (
+	IFS='
+'
+	stagit-index $(hooked) > "$basedir"/index.html
+)
 
 repo() {
 	abs="$(readlink -f "$1")"
