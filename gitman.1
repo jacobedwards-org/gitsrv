@@ -1,0 +1,70 @@
+./"
+./" Copyright (c) 2025 Jacob R. Edwards <jacob@jacobedwards.org>
+./"
+./" Permission to use, copy, modify, and distribute this software for any
+./" purpose with or without fee is hereby granted, provided that the above
+./" copyright notice and this permission notice appear in all copies.
+./"
+./" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIE
+./" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+./" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+./" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+./" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+./" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+./" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+./"
+.Dd October 26, 2025
+.Dt GITMAN 1
+.Os
+.Sh NAME
+.Nm gitman
+.Nd Export manpages from git repositories
+.Sh SYNOPSIS
+.Nm
+.Op Fl d Ar dir
+.Op Ar repo ...
+.Sh DESCRIPTION
+The
+.Nm
+utility writes manpages found in the given git repositories (or
+.Ev GIT_DIR
+if none are specified) to the prefix
+directory, then updates it's
+.Pa mandoc.db
+with
+.Xr makewhatis 8 .
+.Pp
+The options are described below:
+.Bl -tag -width Ds
+.It Fl d Ar dir
+Set the export directory for manpages. Defaults to the contents of
+.Pa /etc/gitman ,
+or the current working directory if it doesn't exist.
+.El
+.Sh FILES
+.Bl -tag -width Ds
+.It Pa /etc/gitman
+The default export directory if
+.Fl d
+isn't specified.
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+.Pp
+Write the manpages 
+from the repositories under
+.Pa ~/git/
+to
+.Pa /var/www/man/main
+along with a
+.Xr makewhatis 8
+database:
+.Pp
+.Dl $ gitman -d /var/www/man/main ~/git/*
+.Sh SEE ALSO
+.Xr git-ls-tree 1 ,
+.Xr git-show 1 ,
+.Xr makewhatis 8
+.Sh AUTHORS
+.An Jacob R. Edwards Aq Mt jacob@jacobedwards.org
