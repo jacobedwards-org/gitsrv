@@ -15,7 +15,8 @@ hooked() (
 	do
 		git --git-dir "$dir" show -s --format="%ct	$dir" ||
 			err "$dir: Unable to get repo information"
-	done | sort -rn | cut -f2-
+	done | sort -rn | cut -f2- | sed "i\\
+${repodir%/}/"
 )
 
 index() (
