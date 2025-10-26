@@ -6,21 +6,22 @@
 .Nd Git hook to automatically run stagit
 .Sh SYNOPSIS
 .Nm
-.Nm
-.Ar install repo Op Ar ...
-.Nm
-.Ar reindex repo Op Ar ...
+.Op Ar repo ...
 .Sh DESCRIPTION
-When used without any arguments,
-the
+The 
 .Nm
-utility behaves like a post-update git hook.  When run with the
-.Ar install
-command, a post-update hook is installed in the given repositories
-and an initial set of stagit files are generated.  To force reindexing
-of a repository, you may use the
-.Ar reindex
-command.
+utility generates repository pages with
+.Xr stagit 1
+and repository index pages with
+.Xr stagit-index 1 .
+When used without arguments,
+.Nm
+determines the repository pages to generate with the
+.Ev GIT_DIR
+environment variable.
+If
+.Ev GIT_DIR
+isn't set, it only generates an index page.
 .Pp
 .Sh FILES
 .Bl -tag -width Ds
@@ -32,12 +33,24 @@ configuration file.
 .Ex -std
 .Sh EXAMPLES
 .Pp
-Install stagit hook in the
-.Qq example
-repository:
+Manually initialize
+repository and index pages for
+.Pa example :
 .Pp
-.Dl $ stagit-hook install ./example
+.Dl $ stagit-hook example
 .Pp
+Setup stagit-hook for all repositories with the
+.Pa git-daemon-export-ok
+file:
+.Bd -offset indent -literal
+$ mkdir -p ~/.git/hooks
+$ echo '#!/bin/sh
+test -e "$GIT_DIR"/git-daemon-export-ok &&
+	exec stagit-hook' > ~/.git/hooks/post-update
+$ chmod +x ~/.git/hooks/post-update
+$ git config --global core.hooksPath ~/.git/hooks
+$ doas sh -c 'echo hasfile git-daemon-export-ok > /etc/stagit-hook'
+.El
 .Sh SEE ALSO
 .Xr stagit 1 ,
 .Xr stagit-index 1 ,

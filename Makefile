@@ -1,7 +1,5 @@
 SCRIPTS =\
 	stagit-hook\
-	stagit-hook-hook\
-	stagit-hook-install\
 
 PREFIX = /usr/local/
 MANPREFIX = ${PREFIX}/man

@@ -5,25 +5,43 @@
 .Nm stagit-hook
 .Nd stagit-hook configuration file
 .Sh DESCRIPTION
+The
 .Nm
-reads configuration from
-.Pa /etc/stagit-hook
-allowing you to set the
-.Va baseurl
-and
-.Va basedir
-variables.
-Here is an example configuration file:
-.Bd -literal
-baseurl https://example.com/git
-basedir /var/www/htdocs/example.com/git
-.Ed
+configuration file contains various options for
+.Xr stagit-hook 1 .
+The options are listed below:
+.Bl -tag -width Ds
+.It Ic baseurl Ar url
+Set the base url for
+.Xr stagit 1 .
+Defaults to
+.Qq https://$(hostname)/projects/ .
+.It Ic basedir Ar directory
+Set the root for generated pages.
+Defaults to
+.Qq /var/www/htdocs/$(hostname)/projects/ .
+.It Ic repodir Ar directory
+Set the repository directory for generating the index.
+Defaults to the home directory.
+.It Ic hasfile Ar path
+Specifies the file that repositories must contain to be indexed.
+Defaults to
+.Qq refs .
+.El
 .Sh FILES
 .Bl -tag -width Ds
 .It Pa /etc/stagit-hook
 Contains configuration data for
 .Xr stagit-hook 1 .
 .El
+.Sh EXAMPLES
+Here is an example
+.Pa /etc/stagit-hook :
+.Bd -offset indent -literal
+baseurl https://example.com/git
+basedir /var/www/htdocs/example.com/git
+hasfile git-daemon-export-ok
+.Ed
 .Sh SEE ALSO
 .Xr stagit-hook 1
 .Sh AUTHORS
