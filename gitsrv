@@ -89,7 +89,7 @@ loadconfig() {
 	fi
 }
 
-rc=/etc/gitsrv
+rc=/etc/gitsrv.conf
 host="$(hostname)"
 basedir=/var/www/htdocs/"$host"/projects/
 baseurl=https://"$host"/projects/

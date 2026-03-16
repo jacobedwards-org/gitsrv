@@ -43,7 +43,7 @@ If the
 configuration option is set, styles are also updated.
 .Sh FILES
 .Bl -tag -width Ds
-.It Pa /etc/gitsrv
+.It Pa /etc/gitsrv.conf
 .Xr gitsrv 5
 configuration file.
 .El
@@ -67,7 +67,7 @@ test -e "$GIT_DIR"/git-daemon-export-ok &&
 	exec gitsrv' > ~/.git/hooks/post-update
 $ chmod +x ~/.git/hooks/post-update
 $ git config --global core.hooksPath ~/.git/hooks
-$ doas sh -c 'echo hasfile git-daemon-export-ok > /etc/gitsrv'
+$ doas sh -c 'echo hasfile git-daemon-export-ok > /etc/gitsrv.conf'
 .El
 .Sh SEE ALSO
 .Xr stagit 1 ,
