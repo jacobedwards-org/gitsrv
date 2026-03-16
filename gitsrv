@@ -89,7 +89,7 @@ loadconfig() {
 	fi
 }
 
-rc=/etc/stagit-hook
+rc=/etc/gitsrv
 host="$(hostname)"
 basedir=/var/www/htdocs/"$host"/projects/
 baseurl=https://"$host"/projects/
@@ -98,7 +98,7 @@ hasfile=refs
 
 loadconfig
 
-err="$(mktemp -t stagit-hook-errXXXXXX)"
+err="$(mktemp -t gitsrv-errXXXXXX)"
 trap 'rm -f "$err"' EXIT
 	# Can't use "${@:-"$GIT_DIR"}" because empty GIT_DIR runs
 	# with empty string instead of just indexing like it should
@@ -116,6 +116,6 @@ trap 'rm -f "$err"' EXIT
 {
 	exit $status
 } > "$err" 2>&1 || {
-	logger -st stagit-hook -p error < "$err"
+	logger -st gitsrv -p error < "$err"
 	exit 1
 }

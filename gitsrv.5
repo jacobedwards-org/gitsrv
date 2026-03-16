@@ -17,13 +17,13 @@
 .Dt STAGIT-HOOK 5
 .Os
 .Sh NAME
-.Nm stagit-hook
-.Nd stagit-hook configuration file
+.Nm gitsrv
+.Nd gitsrv configuration file
 .Sh DESCRIPTION
 The
 .Nm
 configuration file contains various options for
-.Xr stagit-hook 1 .
+.Xr gitsrv 1 .
 The options are listed below:
 .Bl -tag -width Ds
 .It Ic baseurl Ar url
@@ -59,13 +59,13 @@ and
 .El
 .Sh FILES
 .Bl -tag -width Ds
-.It Pa /etc/stagit-hook
+.It Pa /etc/gitsrv
 Contains configuration data for
-.Xr stagit-hook 1 .
+.Xr gitsrv 1 .
 .El
 .Sh EXAMPLES
 Here is an example
-.Pa /etc/stagit-hook :
+.Pa /etc/gitsrv :
 .Bd -offset indent -literal
 baseurl https://example.com/git
 basedir /var/www/htdocs/example.com/git
@@ -73,7 +73,7 @@ hasfile git-daemon-export-ok
 .Ed
 .Sh SEE ALSO
 .Xr stagit 1 ,
-.Xr stagit-hook 1 ,
+.Xr gitsrv 1 ,
 .Xr stagit-index 1
 .Sh AUTHORS
 .An Jacob R. Edwards Aq Mt jacob@jacobedwards.org

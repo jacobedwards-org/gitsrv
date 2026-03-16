@@ -1,6 +1,6 @@
-stagit-hook
-===========
+gitsrv
+======
 
-The stagit-hook project provides a simple post-update hook for
-maintaining [stagit](https://codemadness.org/git/stagit/log.html)(*1*)
-repository pages.
+The gitsrv project provides a simple post-update hook for maintaining
+[stagit](https://codemadness.org/git/stagit/log.html)(*1*) repository
+pages. In the future it will include other functionality
