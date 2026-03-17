@@ -36,6 +36,7 @@ loadconfig() {
 			(distfmt) distfmt="$val" ;;
 			(ghtoken) ghtoken="$val" ;;
 			(mandir) mandir="$val" ;;
+			(pubfile) pubfile="$val" ;;
 			(*) err 'Invalid configuration'
 			esac
 		done < "$rc"
@@ -43,17 +44,21 @@ loadconfig() {
 }
 
 update() {
+	IFS='
+'
+	public="$(find "$@" -maxdepth 1 -name "$pubfile" | awk -F/ -vOFS=/ '{$NF="";print}')"
+
 	test "$stagit" '=' 'true' && {
 		log "Generating stagit pages"
-		stagit-hook "$@"
+		stagit-hook $public
 	}
 	test -n "$distdir" && {
 		log "Creating tag archives"
-		gitdist -a ${distfmt:+-f "$distfmt"} -o "$distdir" "$@"
+		gitdist -a ${distfmt:+-f "$distfmt"} -o "$distdir" $public
 	}
 	test -n "$mandir" && {
 		log "Exporting manpages"
-		gitman -d "$mandir" "$@"
+		gitman -d "$mandir" $public
 	}
 	test -n "$ghtoken" && {
 		log "Mirroring to GitHub"
@@ -61,6 +66,7 @@ update() {
 	}
 }
 
+pubfile=git-daemon-export-ok
 rc=/etc/gitsrv.conf
 loadconfig
 
