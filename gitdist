@@ -65,6 +65,7 @@ mkdists() (
 				test -f "$a" && echo "$a"
 			}
 		done
+		true
 	)
 )
 
