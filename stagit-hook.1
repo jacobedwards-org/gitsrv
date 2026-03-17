@@ -1,0 +1,88 @@
+./"
+./" Copyright (c) 2025-2026 Jacob Edwards <jacob@jacobedwards.org>
+./"
+./" Permission to use, copy, modify, and distribute this software for any
+./" purpose with or without fee is hereby granted, provided that the above
+./" copyright notice and this permission notice appear in all copies.
+./"
+./" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIE
+./" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+./" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+./" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+./" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+./" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+./" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+./"
+.Dd October 19, 2025
+.Dt STAGIT-HOOK 1
+.Os
+.Sh NAME
+.Nm stagit-hook
+.Nd Git hook to automatically run stagit
+.Sh SYNOPSIS
+.Nm
+.Op Fl b Ar basedir
+.Op Fl u Ar baseurl
+.Op Fl r Ar repodir
+.Op Fl p Ar hasfile
+.Op Fl s Ar styledir 
+.Op Ar repo ...
+.Sh DESCRIPTION
+The 
+.Nm
+utility generates repository pages with
+.Xr stagit 1
+and repository index pages with
+.Xr stagit-index 1 .
+When used without arguments,
+.Nm
+determines the repository pages to generate with the
+.Ev GIT_DIR
+environment variable.
+If
+.Ev GIT_DIR
+isn't set, it only generates an index page.
+.Pp
+If the
+.Ic styledir
+configuration option is set, styles are also updated.
+.Pp
+The options map directly to the parameters described in
+.Xr stagit-hook.conf 5 .
+.Sh FILES
+.Bl -tag -width Ds
+.It Pa /etc/stagit-hook.conf
+.Xr stagit-hook.conf 5
+configuration file.
+.Pa ( /etc/stagit-hook 
+is also tried for backward compatibility.)
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+.Pp
+Manually initialize
+repository and index pages for
+.Pa example :
+.Pp
+.Dl $ stagit-hook example
+.Pp
+Setup stagit-hook for all repositories with the
+.Pa git-daemon-export-ok
+file:
+.Bd -offset indent -literal
+$ mkdir -p ~/.git/hooks
+$ echo '#!/bin/sh
+test -e "$GIT_DIR"/git-daemon-export-ok &&
+	exec stagit-hook' > ~/.git/hooks/post-update
+$ chmod +x ~/.git/hooks/post-update
+$ git config --global core.hooksPath ~/.git/hooks
+$ doas sh -c 'echo hasfile git-daemon-export-ok > /etc/stagit-hook'
+.El
+.Sh SEE ALSO
+.Xr stagit 1 ,
+.Xr stagit-index 1 ,
+.Xr githooks 5 ,
+.Xr stagit-hook.conf 5
+.Sh AUTHORS
+.An Jacob R. Edwards Aq Mt jacob@jacobedwards.org

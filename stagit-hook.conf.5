@@ -14,55 +14,60 @@
 ./" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ./"
 .Dd October 19, 2025
-.Dt GITSRV.CONF 5
+.Dt STAGIT-HOOK 5
 .Os
 .Sh NAME
-.Nm gitsrv.conf
-.Nd gitsrv configuration file
+.Nm stagit-hook
+.Nd stagit-hook configuration file
 .Sh DESCRIPTION
 The
 .Nm
 configuration file contains various options for
-.Xr gitsrv 1 .
+.Xr stagit-hook 1 .
 The options are listed below:
 .Bl -tag -width Ds
-.It Ic stagit Ar enable
-Set
-.Ar enable
-to
-.Qq true
-to enable stagit page generation. See
-.Xr stagit-hook.conf 5
-for stagit configuration.
-.It Ic distdir Ar directory
-Enables archive creation for tags and writes archive files to
-.Ar directory .
-.It Ic distfmt Ar format
-Sets the archive format for
-.Xr gitdist 1 .
-(See its
-.Fl f
-flag.)
-.It Ic mandir Ar directory 
-Enable manpage exports with
-.Xr gitman
-and configure the base directory.
-.It Ic ghtoken Ar token
-Enable GitHub mirroring with
-.Xr github-mirror 1
-and use
-.Ar token
-as the PAT.
+.It Ic baseurl Ar url
+Set the base url for
+.Xr stagit 1 .
+Defaults to
+.Qq https://$(hostname)/projects/ .
+.It Ic basedir Ar directory
+Set the root for generated pages.
+Defaults to
+.Qq /var/www/htdocs/$(hostname)/projects/ .
+.It Ic repodir Ar directory
+Set the repository directory for generating the index.
+Defaults to the home directory.
+.It Ic hasfile Ar path
+Specifies the file that repositories must contain to be indexed.
+Defaults to
+.Qq refs .
+.El
+.Bl -tag -width Ds
+.It Ic styledir Ar path
+Use the
+.Pa favicon.png ,
+.Pa logo.png ,
+and
+.Pa style.css
+files from
+.Ar path
+to style repository and index pages as described in
+.Xr stagit 1
+and
+.Xr stagit-index 1 .
 .El
 .Sh FILES
 .Bl -tag -width Ds
-.It Pa /etc/gitsrv.conf
+.It Pa /etc/stagit-hook.conf
 Contains configuration data for
-.Xr gitsrv 1 .
+.Xr stagit-hook 1 .
+.Pa ( /etc/stagit-hook
+is also tried for backward compatibility.)
 .El
 .Sh EXAMPLES
 Here is an example
-.Pa /etc/gitsrv.conf :
+.Pa /etc/stagit-hook :
 .Bd -offset indent -literal
 baseurl https://example.com/git
 basedir /var/www/htdocs/example.com/git
@@ -70,7 +75,7 @@ hasfile git-daemon-export-ok
 .Ed
 .Sh SEE ALSO
 .Xr stagit 1 ,
-.Xr gitsrv 1 ,
+.Xr stagit-hook 1 ,
 .Xr stagit-index 1
 .Sh AUTHORS
 .An Jacob R. Edwards Aq Mt jacob@jacobedwards.org

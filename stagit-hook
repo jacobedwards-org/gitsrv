@@ -1,0 +1,134 @@
+#!/bin/sh
+#
+# Copyright (c) 2025-2026 Jacob Edwards <jacob@jacobedwards.org>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIE
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+set -e
+
+log() {
+	echo "$(basename "$0"): $@" 1>&2
+}
+
+err() {
+	log "$@"
+	exit 1
+}
+
+# This should be more flexible, but it works for now.
+hooked() (
+	cd "$repodir"
+	ls -d */"$hasfile" | awk -F/ '{print $1}' |
+		while read dir
+	do
+		git --git-dir "$dir" show -s --format="%ct	$dir" ||
+			err "$dir: Unable to get repo information"
+	done | sort -rn | cut -f2- | sed "i\\
+${repodir%/}/"
+)
+
+loadfile() {
+	case "$1" in
+	(link) ;;
+	(copy) link=false ;;
+	(*) err "$1: link or copy"
+	esac
+	test "$2" -ef "$3" ||
+	    ${link:-ln -f "$2" "$3"} ||
+	    cat "$2" > "$3"
+}
+
+loadstyle() {
+	c="${1:?requried}"
+	s="$2"
+	d="${3:-.}"
+
+	for f in style.css logo.png favicon.png
+	do
+		loadfile "$c" "$s/$f" "$d/$f"
+	done
+}
+
+index() (
+	IFS='
+'
+	test -n "$styledir" && loadstyle copy "$styledir" "$basedir"
+	stagit-index $(hooked) > "$basedir"/index.html
+)
+
+repo() {
+	abs="$(readlink -f "$1")"
+	nam="$(basename "$abs")"
+	dir="$basedir"/"$nam" 
+	mkdir -p "$dir"
+	cd "$dir"
+	test -n "$styledir" && loadstyle link ..
+	stagit -u "$baseurl" "$abs"
+}
+
+loadconfig() {
+	test -f "$rc" ||
+	    rc="${rc%.conf}"
+	if test -f "$rc"
+	then
+		while read key val
+		do
+			case $key in
+			(basedir) basedir="$val" ;;
+			(baseurl) baseurl="$val" ;;
+			(repodir) repodir="$val" ;;
+			(hasfile) hasfile="$val" ;;
+			(styledir) styledir="$val" ;;
+			(*) err 'Invalid configuration'
+			esac
+		done < "$rc"
+	fi
+}
+
+rc=/etc/stagit-hook.conf
+host="$(hostname)"
+baseurl=https://"$host"/projects/
+repodir="$HOME"
+hasfile=refs
+
+loadconfig
+
+while test $# -gt 0
+do
+	case "$1" in
+	(-b|-basedir) basedir="${2:?-basedir: Requires an argument}"; shift ;;
+	(-u|-baseurl) baseurl="${2:?-baseurl: Requires an argument}"; shift ;;
+	(-r|-repodir) repodir="${2:?-repodir: Requires an argument}"; shift ;;
+	(-p|-hasfile) hasfile="${2:?-hasfile: Requires an argument}"; shift ;;
+	(-s|-styledir) styledir="${2:?-styledir: Requires an argument}"; shift ;;
+	(--) break ;;
+	(-*) err "$1: Invalid option
+usage: stagit-hook [-b basedir] [-u baseurl] [-r repodir] [-p hasfile] [-s styledir]"
+	esac
+	shift
+done
+
+test -n "$basedir" ||
+	err 'basedir: Base directory undefined'
+
+test $# -eq 0 &&
+    set -- "${GIT_DIR:-.}"
+
+index
+for d in "$@"
+do
+	repo "$d" || {
+		status=$?
+		log "$d: Unable to generate"
+	}
+done

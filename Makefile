@@ -2,12 +2,15 @@ SCRIPTS =\
 	gitdist\
 	github-mirror\
 	gitsrv\
+	stagit-hook\
 
 MANUALS =\
 	gitdist.1\
 	github-mirror.1\
 	gitsrv.1\
 	gitsrv.conf.5\
+	stagit-hook.1
+	stagit-hook.conf.5
 
 PREFIX = /usr/local/
 MANPREFIX = ${PREFIX}/man
