@@ -5,7 +5,7 @@ SCRIPTS =\
 
 MANUALS =\
 	gitdist.1\
-	github-mirror\
+	github-mirror.1\
 	gitsrv.1\
 	gitsrv.5\
 
