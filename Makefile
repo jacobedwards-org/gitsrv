@@ -1,9 +1,11 @@
 SCRIPTS =\
 	gitsrv\
+	gitdist\
 
 MANUALS =\
 	gitsrv.1\
 	gitsrv.5\
+	gitdist.1\
 
 PREFIX = /usr/local/
 MANPREFIX = ${PREFIX}/man

@@ -36,11 +36,15 @@ determines the repository pages to generate with the
 environment variable.
 If
 .Ev GIT_DIR
-isn't set, it only generates an index page.
-.Pp
-If the
+isn't set, it only generates an index page.  If the
 .Ic styledir
 configuration option is set, styles are also updated.
+.Pp
+If
+.Ic distdir
+is set,
+.Xr gitdist 1
+is used to generate archives for annotated tags.
 .Sh FILES
 .Bl -tag -width Ds
 .It Pa /etc/gitsrv.conf
@@ -73,6 +77,7 @@ $ doas sh -c 'echo hasfile git-daemon-export-ok > /etc/gitsrv.conf'
 .Xr stagit 1 ,
 .Xr stagit-index 1 ,
 .Xr githooks 5 ,
+.Xr gitdist 1 ,
 .Xr gitsrv 5
 .Sh AUTHORS
 .An Jacob R. Edwards Aq Mt jacob@jacobedwards.org

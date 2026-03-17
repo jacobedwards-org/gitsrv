@@ -1,0 +1,96 @@
+#!/bin/sh
+#
+# Copyright (c) 2026 Jacob Edwards <jacob@jacobedwards.org>
+#
+# Permission to use, copy, modify, and distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIE
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+set -e
+
+err() {
+	echo "$@" 1>&2
+	exit 1
+}
+
+reponame() {
+	basename "$(
+		case "$(git -C "$1" rev-parse --is-bare-repository)" in
+		(true)  git -C "$1" rev-parse --absolute-git-dir ;;
+		(false) git -C "$1" rev-parse --show-toplevel ;;
+		(*) err 'Unexpected result in reponame'
+		esac
+	)"
+}
+
+mkdists() (
+	repo="${1:?Expected a repo}"
+	shift
+
+	name="$(reponame "$repo")"
+
+	if test -n "$tag"; then
+		set -- "$tag"
+	else
+		set -- $(git -C "$repo" tag --sort=-creatordate)
+		${all:-false} || set -- "$1"
+	fi
+
+	test $# -eq 0 &&
+		exit 0
+
+	(
+		! test -d "$dir" &&
+			err "$dir: Directory doesn't exist"
+		$subdir && {
+			dir="$dir/$name"
+			mkdir -p "$dir"
+		}
+
+		for tag in "$@"
+		do
+			fullname="$name"-"${tag#v}"
+			a="$dir"/"$fullname"."$format"
+			test '!' -f "$a" && {
+				git -C "$repo" archive --format="$format" \
+				    --prefix="$name/" "$tag" -o "$a"
+				test -f "$a" && echo "$a"
+			}
+		done
+	)
+)
+
+all=false
+subdir=false
+format=tar.gz
+while test $# -gt 0
+do
+	case "$1" in
+	(-a) all=true ;;
+	(-s) subdir=true ;;
+	(-f) format="${2:?-f: Requires an argument}"; shift ;;
+	(-o) dir="${2:?-o: Requires an argument}"; shift ;;
+	(-t) tag-"${2:?-t: Requires an argument}"; shift ;;
+	(--) break ;;
+	(-*) err "$1: Invalid option
+usage: gitdist -o dir [-a] [-f format] [-t tag] [repo ...]" ;;
+	(*) break ;;
+	esac
+	shift
+done
+
+test $# -eq 0 &&
+	set -- "${GIT_DIR:-.}"
+
+for repo in "$@"
+do
+	mkdists "$repo"
+done

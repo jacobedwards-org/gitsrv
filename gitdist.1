@@ -1,0 +1,82 @@
+./"
+./" Copyright (c) 2026 Jacob Edwards <jacob@jacobedwards.org>
+./"
+./" Permission to use, copy, modify, and distribute this software for any
+./" purpose with or without fee is hereby granted, provided that the above
+./" copyright notice and this permission notice appear in all copies.
+./"
+./" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIE
+./" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+./" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+./" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+./" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+./" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+./" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+./"
+.Dd March 16, 2026
+.Dt GITDIST 1
+.Os
+.Sh NAME
+.Nm gitdist
+.Nd Create archives for git tags
+.Sh SYNOPSIS
+.Nm
+.Fl o Ar dir
+.Op Fl as
+.Op Fl t Ar tag
+.Op Fl f Ar format
+.Op Ar repo ...
+.Sh DESCRIPTION
+The 
+.Nm
+creates archives of files for git tags in the given repositories,
+outputting them in
+.Ar dir .
+Archives are named using the repository directory name and the tag
+name
+.Pq "minus any leading" Qq v ,
+e.g.
+.Qq name-tag.tar.gz .
+Newly generated archives are printed to stdout
+.Pp
+If any
+.Ar repo
+arguments are specified
+.Nm
+operates on those, otherwise it falls back on
+the
+.Ev GIT_DIR
+environment variable or the current working directory if it's
+undefined.
+.Pp
+The following options are available:
+.Bl -tag -width indent
+.It Fl a
+Create an archives for every tag.
+.It Fl s
+Group archives into subdirectories by name.
+.It Fl o Ar dir
+Set the archive output directory.
+.It Fl t Ar tag
+Only archives for
+.Ar tag .
+.It Fl f Ar format
+Specify the archive format (see
+.Xr git-archive 1
+for options). Default
+.Qq tar.gz .
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+.Pp
+Generate archives for every tag in the
+.Pa gitsrv
+repository:
+.Pp
+.Dl $ gitdist -a -o /var/www/htdocs/dist gitsrv
+.Sh SEE ALSO
+.Xr gitsrv 1 ,
+.Xr git-archive 5
+.Sh AUTHORS
+.An Jacob R. Edwards Aq Mt jacob@jacobedwards.org
