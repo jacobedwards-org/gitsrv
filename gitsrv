@@ -16,8 +16,12 @@
 
 set -e
 
+log() {
+	echo "$(basename "$0"): $@" 1>&2
+}
+
 err() {
-	echo "$@" 1>&2
+	log "$@"
 	exit 1
 }
 
@@ -101,12 +105,14 @@ stagit_hook() {
 }
 
 update() {
-	stagit_hook "$@"
+	test -n "$basedir" && {
+		log "Generating stagit pages"
+		stagit_hook "$@"
+	}
 }
 
 rc=/etc/gitsrv.conf
 host="$(hostname)"
-basedir=/var/www/htdocs/"$host"/projects/
 baseurl=https://"$host"/projects/
 repodir="$HOME"
 hasfile=refs
