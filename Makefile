@@ -7,7 +7,7 @@ MANUALS =\
 	gitdist.1\
 	github-mirror.1\
 	gitsrv.1\
-	gitsrv.5\
+	gitsrv.conf.5\
 
 PREFIX = /usr/local/
 MANPREFIX = ${PREFIX}/man
