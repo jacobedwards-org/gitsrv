@@ -21,6 +21,7 @@
 .Nd Create archives for git tags
 .Sh SYNOPSIS
 .Nm
+.Op Fl a Ar archivefile
 .Op Fl p Ar pubfile
 .Op Fl t Ar pat
 .Op Ar repo ...
@@ -50,6 +51,11 @@ and read/write access to
 .Pp
 The following options are available:
 .Bl -tag -width indent
+.It Fl a Ar archivefile
+If
+.Ar archivefile 
+is present, mark the repository as archived on GitHub. Default is
+.Pa archived .
 .It Fl p Ar pubfile
 Specify the file that determines if the repository is public or not. Default is
 .Pa git-daemon-export-ok .

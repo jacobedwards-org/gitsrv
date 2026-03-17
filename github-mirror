@@ -58,18 +58,31 @@ update() {
 		--visibility "$visibility" \
 		--accept-visibility-change-consequences >/dev/null
 
+	archived=false
+	test -f "$GIT_DIR/${archivefile:-archived}" &&
+		archived=true
+
+	! $archived &&
+	    gh repo unarchive "$path" -y
+
 	log "Pushing to github.com/$path"
 	git push --mirror "git@github.com:$user/$name"
+
+	if $archived; then
+		log "Archiving github.com/$path"
+		gh repo archive "$path" -y
+	fi
 }
 
 while test $# -gt 0
 do
 	case "$1" in
+	(-a) archivefile="${2:?-a: requires an argument}"; shift ;;
 	(-p) pubfile="${2:?-p: requires an argument}"; shift ;;
 	(-t) export GH_TOKEN="${2:?-t: requires an argument}"; shift ;;
 	(--) shift; break ;;
 	(-*) err "$1: Invalid option
-usage: github-mirror [-p pubfile] [-t pat] [repo ...]" ;;
+usage: github-mirror [-a archivefile] [-p pubfile] [-t pat] [repo ...]" ;;
 	(*) break ;;
 	esac
 	shift
