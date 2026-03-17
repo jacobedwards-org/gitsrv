@@ -90,6 +90,7 @@ loadconfig() {
 			(distdir) distdir="$val" ;;
 			(distfmt) distfmt="$val" ;;
 			(ghtoken) ghtoken="$val" ;;
+			(mandir) mandir="$val" ;;
 			(*) err 'Invalid configuration'
 			esac
 		done < "$rc"
@@ -115,6 +116,10 @@ update() {
 	test -n "$distdir" && {
 		log "Creating tag archives"
 		gitdist -a ${distfmt:+-f "$distfmt"} -o "$distdir" "$@"
+	}
+	test -n "$mandir" && {
+		log "Exporting manpages"
+		gitman -d "$mandir" "$@"
 	}
 	test -n "$ghtoken" && {
 		log "Mirroring to GitHub"
