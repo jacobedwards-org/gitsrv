@@ -89,6 +89,21 @@ loadconfig() {
 	fi
 }
 
+stagit_hook() {
+	index
+	for d in "$@"
+	do
+		repo "$d" || {
+			status=$?
+			echo "$d: Unable to generate" 1>&2
+		}
+	done
+}
+
+update() {
+	stagit_hook "$@"
+}
+
 rc=/etc/gitsrv.conf
 host="$(hostname)"
 basedir=/var/www/htdocs/"$host"/projects/
@@ -105,14 +120,7 @@ trap 'rm -f "$err"' EXIT
 	test $# -eq 0 -a -n "$GIT_DIR" &&
 		set -- "$GIT_DIR"
 	unset GIT_DIR
-	index
-	for d in "$@"
-	do
-		repo "$d" || {
-			status=$?
-			echo "$d: Unable to generate" 1>&2
-		}
-	done
+	update "$@"
 {
 	exit $status
 } > "$err" 2>&1 || {
