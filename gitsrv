@@ -89,6 +89,7 @@ loadconfig() {
 			(styledir) styledir="$val" ;;
 			(distdir) distdir="$val" ;;
 			(distfmt) distfmt="$val" ;;
+			(ghtoken) ghtoken="$val" ;;
 			(*) err 'Invalid configuration'
 			esac
 		done < "$rc"
@@ -114,6 +115,10 @@ update() {
 	test -n "$distdir" && {
 		log "Creating tag archives"
 		gitdist -a ${distfmt:+-f "$distfmt"} -o "$distdir" "$@"
+	}
+	test -n "$ghtoken" && {
+		log "Mirroring to GitHub"
+		github-mirror -t "$ghtoken" "$@"
 	}
 }
 

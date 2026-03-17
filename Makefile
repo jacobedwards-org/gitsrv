@@ -1,11 +1,13 @@
 SCRIPTS =\
-	gitsrv\
 	gitdist\
+	github-mirror\
+	gitsrv\
 
 MANUALS =\
+	gitdist.1\
+	github-mirror\
 	gitsrv.1\
 	gitsrv.5\
-	gitdist.1\
 
 PREFIX = /usr/local/
 MANPREFIX = ${PREFIX}/man

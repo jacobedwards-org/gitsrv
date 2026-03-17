@@ -1,0 +1,74 @@
+./"
+./" Copyright (c) 2026 Jacob Edwards <jacob@jacobedwards.org>
+./"
+./" Permission to use, copy, modify, and distribute this software for any
+./" purpose with or without fee is hereby granted, provided that the above
+./" copyright notice and this permission notice appear in all copies.
+./"
+./" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIE
+./" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+./" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+./" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+./" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+./" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+./" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+./"
+.Dd March 16, 2026
+.Dt GITHUB-MIRROR 1
+.Os
+.Sh NAME
+.Nm github-mirror
+.Nd Create archives for git tags
+.Sh SYNOPSIS
+.Nm
+.Op Fl p Ar pubfile
+.Op Fl t Ar pat
+.Op Ar repo ...
+.Sh DESCRIPTION
+The
+.Nm
+utility mirrors bare git repositories to GitHub. GitHub repositories
+are created/updated with the description pulled from the bare
+repository's
+.Pa description
+file and are set to public if
+.Ar pubfile
+exists. If present, the homepage is set to the contents of the
+.Pa homepage
+file.
+Repositories are then pushed in mirror mode.
+.Pp
+.Nm
+must be authenticated to GitHub by setting
+.Ev GH_TOKEN
+or using the
+.Fl t
+option. The token must allow read access to
+.Qq metadata
+and read/write access to
+.Qq administration .
+.Pp
+The following options are available:
+.Bl -tag -width indent
+.It Fl p Ar pubfile
+Specify the file that determines if the repository is public or not. Default is
+.Pa git-daemon-export-ok .
+.It Fl t Ar pat
+Set the GitHub PAT token. Required if
+.Ev GH_TOKEN
+isn't set.
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+.Pp
+Mirror all the git repositories under
+.Pa /var/git
+to GitHub:
+.Pp
+.Dl $ github-mirror -t "$(cat gh_token)" /var/git/*
+.Sh SEE ALSO
+.Xr gitsrv 1 ,
+.Xr gh 1
+.Sh AUTHORS
+.An Jacob R. Edwards Aq Mt jacob@jacobedwards.org
