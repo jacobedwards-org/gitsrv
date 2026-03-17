@@ -14,6 +14,27 @@ follows:
 Each of these operations may be enabled or disabled as desired, and
 most have a utility to perform the function independently as needed.
 
+Usage
+-----
+
+To automatically call gitsrv, the simplest method is to create a
+post-update hook in a central location, then use it as the git hooks
+directory globally:
+
+	$ mkdir ~/hooks
+	$ echo '#!/bin/sh
+	gitsrv' > ~/hooks/post-update
+	$ chmod 755 ~/hooks/post-update
+	$ git config --global core.hooksPath '~/hooks'
+
+Once that's done, all repositories owned by the user will use the
+same hooks. (Reference githooks(5) for more information on git
+hooks.)
+
+To prevent excessive resource usage, it's a good idea consolidate
+updates at reasonable intervals by putting them in a queue. In the
+future a simple queue system will be included in this distribution.
+
 Installation
 ------------
 
