@@ -52,7 +52,7 @@ update() {
 		homepage="$(<"$GIT_DIR"/homepage)"
 
 	log "Updating github.com/$path"
-	echo gh repo edit "$path" \
+	gh repo edit "$path" \
 		${homepage:+-h "$homepage"} \
 		-d "$(<"$GIT_DIR"/description)" \
 		--visibility "$visibility" \
