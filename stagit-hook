@@ -113,7 +113,8 @@ do
 	(-s|-styledir) styledir="${2:?-styledir: Requires an argument}"; shift ;;
 	(--) break ;;
 	(-*) err "$1: Invalid option
-usage: stagit-hook [-b basedir] [-u baseurl] [-r repodir] [-p hasfile] [-s styledir]"
+usage: stagit-hook [-b basedir] [-u baseurl] [-r repodir] [-p hasfile] [-s styledir] [repo ...]" ;;
+	(*) break ;;
 	esac
 	shift
 done
