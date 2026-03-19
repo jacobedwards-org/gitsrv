@@ -122,8 +122,8 @@ done
 test -n "$basedir" ||
 	err 'basedir: Base directory undefined'
 
-test $# -eq 0 &&
-    set -- "${GIT_DIR:-.}"
+test $# -eq 0 -a -n "$GIT_DIR" &&
+    set -- "$GIT_DIR"
 
 index
 for d in "$@"
