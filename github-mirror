@@ -49,12 +49,12 @@ update() {
 	fi
 
 	test -f "$GIT_DIR"/homepage &&
-		homepage="$(<"$GIT_DIR"/homepage)"
+		homepage="$(cat "$GIT_DIR"/homepage)"
 
 	log "Updating github.com/$path"
 	gh repo edit "$path" \
 		${homepage:+-h "$homepage"} \
-		-d "$(<"$GIT_DIR"/description)" \
+		-d "$(cat "$GIT_DIR"/description)" \
 		--visibility "$visibility" \
 		--accept-visibility-change-consequences >/dev/null
 

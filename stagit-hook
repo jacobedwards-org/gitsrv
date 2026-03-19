@@ -29,7 +29,7 @@ err() {
 hooked() (
 	cd "$repodir"
 	ls -d */"$hasfile" | awk -F/ '{print $1}' |
-		while read dir
+		while read -r dir
 	do
 		git --git-dir "$dir" show -s --format="%ct	$dir" ||
 			err "$dir: Unable to get repo information"
@@ -81,7 +81,7 @@ loadconfig() {
 	    rc="${rc%.conf}"
 	if test -f "$rc"
 	then
-		while read key val
+		while read -r key val
 		do
 			case $key in
 			(basedir) basedir="$val" ;;

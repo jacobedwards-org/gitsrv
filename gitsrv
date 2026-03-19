@@ -28,7 +28,7 @@ err() {
 loadconfig() {
 	if test -f "$rc"
 	then
-		while read key val
+		while read -r key val
 		do
 			case $key in
 			(stagit) stagit="$val" ;;
