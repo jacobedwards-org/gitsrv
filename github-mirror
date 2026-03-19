@@ -32,7 +32,7 @@ update() {
 	(true) ;;
 	(false)
 		log "$GIT_DIR: Isn't a bare git repository"
-		continue
+		return 1
 	esac
 
 	name="$(basename "$(git rev-parse --absolute-git-dir)" | sed 's/\.git$//')"
