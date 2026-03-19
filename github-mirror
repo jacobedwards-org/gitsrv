@@ -97,5 +97,8 @@ test $# -eq 0 &&
 
 for d in "$@"
 do
-	update "$d"
+	update "$d" ||
+	    status=1
 done
+
+exit ${status:-0}
