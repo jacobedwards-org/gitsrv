@@ -81,7 +81,6 @@ unset GIT_DIR
 
 {
 	update "$@"
-	exit $status
 } > "$err" 2>&1 || {
 	logger -st gitsrv -p error < "$err"
 	exit 1
