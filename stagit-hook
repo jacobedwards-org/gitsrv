@@ -133,3 +133,5 @@ do
 		log "$d: Unable to generate"
 	}
 done
+
+exit $status
