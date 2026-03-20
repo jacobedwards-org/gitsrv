@@ -41,7 +41,7 @@ mkdists() (
 		set -- "$tag"
 	else
 		set -- $(git -C "$repo" tag --sort=-creatordate)
-		${all:-false} || set -- "$1"
+		${all:-false} || set -- $1
 	fi
 
 	test $# -eq 0 &&
