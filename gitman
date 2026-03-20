@@ -27,13 +27,7 @@ do
 	shift
 done
 
-if test -z "$prefix"; then
-	if test -e /etc/gitman; then
-		prefix="$(</etc/gitman)"
-	else
-		prefix=.
-	fi
-fi
+: ${prefix:=.}
 
 gitls() {
 	git ls-tree --full-tree -r HEAD
