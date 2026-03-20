@@ -31,9 +31,9 @@ Once that's done, all repositories owned by the user will use the
 same hooks. (Reference githooks(5) for more information on git
 hooks.)
 
-To prevent excessive resource usage, it's a good idea consolidate
-updates at reasonable intervals by putting them in a queue. In the
-future a simple queue system will be included in this distribution.
+To throttle updates and conserve resources, consider using
+[conque](https://jacobedwards.org/projects/conque) or some other
+consolidating/deduplicating job queue.
 
 Installation
 ------------
