@@ -28,7 +28,8 @@ err() {
 # This should be more flexible, but it works for now.
 hooked() (
 	cd "$repodir"
-	ls -d */"$hasfile" | awk -F/ '{print $1}' |
+	find . -mindepth 2 -maxdepth 2 -type f |
+	    awk -vn="$hasfile" -F/ '$NF == n {print $2}' |
 		while read -r dir
 	do
 		git --git-dir "$dir" show -s --format="%ct	$dir" ||
@@ -63,7 +64,9 @@ index() (
 	IFS='
 '
 	test -n "$styledir" && loadstyle copy "$styledir" "$basedir"
-	stagit-index $(hooked) > "$basedir"/index.html
+	hooked="$(hooked)"
+	test -n "$hooked" &&
+		stagit-index $hooked > "$basedir"/index.html
 )
 
 repo() {
