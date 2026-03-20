@@ -61,7 +61,7 @@ mkdists() (
 			a="$dir"/"$fullname"."$format"
 			test '!' -f "$a" && {
 				git -C "$repo" archive --format="$format" \
-				    --prefix="$name/" "$tag" -o "$a"
+				    --prefix="$fullname/" "$tag" -o "$a"
 				test -f "$a" && echo "$a"
 			}
 		done
