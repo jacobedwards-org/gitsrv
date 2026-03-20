@@ -47,3 +47,23 @@ Documentation
 
 Further documentation can be found in the manpages included with
 the distribution.
+
+gitman
+------
+
+The gitman utility was specifically designed for hosting manpages
+on a website using OpenBSD's man.cgi, but it would be easy to use
+for other applications as well.
+
+It should work on Linux too, although using `makewhatis(8)` might
+not make sense in that environment since it appears to be a central
+database.
+
+To configure `man.cgi` on OpenBSD, download the source tree to
+`/usr/src` and go to `/usr/src/usr.bin/mandoc/`. Then follow the
+instructions in the Makefile:
+
+        # To configure, run:    cp cgi.h.example cgi.h; vi cgi.h
+        # To build, run:        make man.cgi
+        # To install, run:      sudo make installcgi
+        # After that, read:     man man.cgi.8

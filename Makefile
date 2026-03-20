@@ -1,12 +1,14 @@
 SCRIPTS =\
 	gitdist\
 	github-mirror\
+	gitman\
 	gitsrv\
 	stagit-hook\
 
 MANUALS =\
 	gitdist.1\
 	github-mirror.1\
+	gitman.1\
 	gitsrv.1\
 	gitsrv.conf.5\
 	stagit-hook.1\
