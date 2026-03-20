@@ -26,13 +26,14 @@
 .Sh DESCRIPTION
 The
 .Nm
-utility writes manpages found in the given git repositories (or
+utility exports manpages from git repositories and updates the
+.Pa mandoc.db .
+If the
 .Ev GIT_DIR
-if none are specified) to the prefix
-directory, then updates it's
-.Pa mandoc.db
-with
-.Xr makewhatis 8 .
+is defined and no repositories were provided as arguments,
+.Nm
+exports manpages from
+.Ev GIT_DIR .
 .Pp
 The options are described below:
 .Bl -tag -width Ds
