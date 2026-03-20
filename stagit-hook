@@ -99,8 +99,12 @@ repo() {
 	dir="$basedir"/"$nam" 
 	mkdir -p "$dir"
 	cd "$dir"
-	test -n "$styledir" && loadstyle link ..
-	stagit -u "$baseurl" "$abs"
+	if stagit -u "$baseurl" "$abs"
+	then
+		test -n "$styledir" && loadstyle link ..
+	else
+		rmdir "$dir" 2>/dev/null
+	fi
 }
 
 loadconfig() {
