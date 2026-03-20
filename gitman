@@ -16,11 +16,20 @@
 
 set -e
 
+log() {
+	echo "$(basename "$0"): $@" 1>&2
+}
+
+usage() {
+	echo "usage: $(basename "$0") [-d dir] [repo ...]" 1>&2
+	exit 1
+}
+
 while test $# -gt 0
 do
 	case "$1" in
 	(-d) prefix="${2:?-d requires an argument}"; shift ;;
-	(-*) echo 'usage: gitman [-d dir] [repo ...]' 1>&2; exit 1 ;;
+	(-*) log "$1: Invalid option"; usage ;;
 	(--) shift; break ;;
 	(*) break ;;
 	esac
