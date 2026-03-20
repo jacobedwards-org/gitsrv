@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (c) 2025 Jacob R. Edwards <jacob@jacobedwards.org>
+# Copyright (c) 2025-2026 Jacob R. Edwards <jacob@jacobedwards.org>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -14,8 +14,6 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-set -e
-
 log() {
 	echo "$(basename "$0"): $@" 1>&2
 }
@@ -24,19 +22,6 @@ usage() {
 	echo "usage: $(basename "$0") [-d dir] [repo ...]" 1>&2
 	exit 1
 }
-
-while test $# -gt 0
-do
-	case "$1" in
-	(-d) prefix="${2:?-d requires an argument}"; shift ;;
-	(-*) log "$1: Invalid option"; usage ;;
-	(--) shift; break ;;
-	(*) break ;;
-	esac
-	shift
-done
-
-: ${prefix:=.}
 
 gitls() {
 	git ls-tree --full-tree -r HEAD
@@ -52,9 +37,23 @@ gitman() {
 	echo "$path"
 }
 
+set -e
+
 case "$(uname)" in
 (OpenBSD) makewhatis() { command makewhatis -d "$prefix" "$@" ;} ;;
 esac
+
+prefix=.
+while test $# -gt 0
+do
+	case "$1" in
+	(-d) prefix="${2:?-d requires an argument}"; shift ;;
+	(-*) log "$1: Invalid option"; usage ;;
+	(--) shift; break ;;
+	(*) break ;;
+	esac
+	shift
+done
 
 pages="$(
 	for d in "${@:-"${GIT_DIR:?No repositories given}"}"
