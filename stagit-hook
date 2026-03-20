@@ -38,6 +38,31 @@ hooked() (
 ${repodir%/}/"
 )
 
+outdated() (
+	IFS='
+'
+	cd "$basedir"
+	find . -mindepth 2 -maxdepth 2 -type f -name log.html | cut -d/ -f2 |
+	    awk -vb="$basedir" '
+BEGIN {
+	for (i = 1; i <= ARGC; ++i) {
+		split(ARGV[i], a, "/")
+		valids[a[length(a)]] = 1
+		delete ARGV[i]
+	}
+	ARGC = 0
+}
+!($0 in valids) { print b "/" $0 }' $hooked
+)
+
+clean() (
+	IFS='
+'
+	rm -rf $(outdated)
+	test -z "$hooked" &&
+		rm -f "$index"
+)
+
 loadfile() {
 	case "$1" in
 	(link) ;;
@@ -64,9 +89,8 @@ index() (
 	IFS='
 '
 	test -n "$styledir" && loadstyle copy "$styledir" "$basedir"
-	hooked="$(hooked)"
 	test -n "$hooked" &&
-		stagit-index $hooked > "$basedir"/index.html
+		stagit-index $hooked > "$index"
 )
 
 repo() {
@@ -128,6 +152,10 @@ test -n "$basedir" ||
 test $# -eq 0 -a -n "$GIT_DIR" &&
     set -- "$GIT_DIR"
 
+index="$basedir"/index.html
+hooked="$(hooked)"
+
+clean
 index
 for d in "$@"
 do
