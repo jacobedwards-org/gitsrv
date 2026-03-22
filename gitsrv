@@ -38,7 +38,7 @@ loadconfig() {
 			(ghtoken) ghtoken="$val" ;;
 			(mandir) mandir="$val" ;;
 			(pubfile) pubfile="$val" ;;
-			(*) err 'Invalid configuration'
+			(*) err "$key: Invalid configuration"
 			esac
 		done < "$rc"
 	fi
