@@ -31,6 +31,7 @@ loadconfig() {
 		while read -r key val
 		do
 			case $key in
+			('#'*|'') continue ;;
 			(stagit) stagit="$val" ;;
 			(distdir) distdir="$val" ;;
 			(distfmt) distfmt="$val" ;;

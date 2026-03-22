@@ -116,6 +116,7 @@ loadconfig() {
 		while read -r key val
 		do
 			case $key in
+			('#'*|'') continue ;;
 			(basedir) basedir="$val" ;;
 			(baseurl) baseurl="$val" ;;
 			(repodir) repodir="$val" ;;
